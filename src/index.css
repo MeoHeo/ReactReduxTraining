@@ -2,11 +2,11 @@
 @import "../suitcss-components-grid";
 @import "../suitcss-utils-size"; */
 
-@custom-media --sm-viewport (min-width: 320px) and (max-width: 640px);
+/* @custom-media --sm-viewport (min-width: 320px) and (max-width: 640px);
 @custom-media --md-viewport (min-width: 640px) and (max-width: 960px);
-@custom-media --lg-viewport (min-width: 960px);
+@custom-media --lg-viewport (min-width: 960px); */
 
-:root {
+:root {/*support by css*/
   --Grid-gutterSize: 25px;
 }
 body {
