@@ -1,12 +1,15 @@
 {
-  "name": "hello-world",
+  "name": "TerralogicTraining",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-redux": "^5.0.7",
     "react-scripts": "1.1.4",
     "react-suitcss": "^1.1.1",
+    "redux": "^4.0.0",
+    "redux-thunk": "^2.3.0",
     "suitcss": "^3.0.0",
     "suitcss-components-grid": "^4.0.0",
     "suitcss-utils-size": "^2.0.1"

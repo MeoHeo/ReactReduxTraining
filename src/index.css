@@ -1,6 +1,6 @@
-@import "../suitcss";
+/* @import "../suitcss";
 @import "../suitcss-components-grid";
-@import "../suitcss-utils-size";
+@import "../suitcss-utils-size"; */
 
 @custom-media --sm-viewport (min-width: 320px) and (max-width: 640px);
 @custom-media --md-viewport (min-width: 640px) and (max-width: 960px);
@@ -11,6 +11,6 @@
 }
 body {
   margin: 0;
-  padding: 0;
+  padding: calc(var(--Grid-gutterSize) * 2);
   font-family: sans-serif;
 }
