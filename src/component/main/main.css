@@ -1,4 +1,15 @@
-.MainComponent-test {
-  color: aqua;
-  font-size: 16px;
+.MainComponent-top {
+  border: solid 1px;
+}
+
+.MainComponent-bottom {
+  border: solid 1px;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100px;
+  display: block;
+  overflow: hidden;
 }
