@@ -1,20 +1,104 @@
 import React, { Component } from 'react';
-import Calendar from 'react-calendar';
-import moment from 'moment';
 import './main.css';
+import DateComponent from '../date/DateComponent';
+import moment from 'moment';
 
 export default class MainComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            date: new Date(),
-            startDate: "mm/dd/yyyy",
-            endDate: "mm/dd/yyyy"
+            startDate: null,
+            endDate: null,
+            daysLeave: 0,
+            leaveType: '',
+            erroSubmit: {
+                leaveType: '',
+                startDay: '',
+                endDay: ''
+            }
         }
     }
-    onChangeDate = date => {
-        this.setState({ date,startDate:moment(date).format('MM/DD/YYYY') })
+    getDate = (type, date) => {
+        if (type === "startDate") {
+            this.setState({
+                startDate: date
+            }, function () {
+                this.calDaysLeave(this.state.startDate, this.state.endDate);
+            })
+        } else {
+            this.setState({
+                endDate: date
+            }, function () {
+                this.calDaysLeave(this.state.startDate, this.state.endDate);
+            })
+        }
     }
+    calDaysLeave = (startDate, endDate) => {
+        if (startDate && endDate) {
+            let days = this.enumerateDaysBetweenDates(startDate, endDate);
+            this.setState({
+                daysLeave: days
+            })
+
+        }
+    }
+    enumerateDaysBetweenDates = (startDate, endDate) => {
+        var dates = [];
+
+        var currDate = moment(startDate).startOf('day');
+        var lastDate = moment(endDate).startOf('day');
+        do {
+            let day = currDate.clone().toDate().getDay()
+            if (day !== 6 && day !== 0) {
+                dates.push(day);
+            }
+        } while (currDate.add(1, 'days').diff(lastDate) <= 0);
+
+        console.log("currDate.toDate()", dates, dates.length);
+        return dates.length;
+    }
+    submitLeaveRequest = () => {
+        if (!this.checkSubmitForm()) {
+            setTimeout(function(){alert("You have just send leave request success")},100)
+        } else {
+        }
+    }
+    checkSubmitForm = () => {
+        let isErro = false;
+        if (this.state.leaveType === '') {
+            this.state.erroSubmit.leaveType = "Leave type id can't be empty"
+        }else{
+            this.state.erroSubmit.leaveType = ''
+        }
+        if (!this.state.startDate) {
+            this.state.erroSubmit.startDay = "Start day can't be empty"
+        }else{
+            this.state.erroSubmit.startDay = ''
+        }
+        if (!this.state.endDate) {
+            this.state.erroSubmit.endDay = "End day can't be empty"
+        }else{
+            this.state.erroSubmit.endDay = ''
+        }
+        let obj = this.state.erroSubmit
+        Object.keys(obj).forEach(function (prop) {
+            let value = obj[prop];
+            if(value!==''){
+                isErro = true;
+                return isErro;
+            }
+            console.log(value);
+        });
+        this.forceUpdate();
+        return isErro;
+
+    }
+    getLeaveType = (e) => {
+        this.setState({
+            leaveType: e.target.value
+        })
+    }
+
     render() {
         return (
             <div className='MainComponent row'>
@@ -47,38 +131,39 @@ export default class MainComponent extends Component {
                     <p>Leave Request</p>
                     <form className="form-horizontal">
                         <div className="form-group">
-                            <label className="control-label col-sm-2 col-xs-4">Leave type(*)</label>
+                            <label className="control-label col-sm-2 col-xs-4" htmlFor="sel1">Leave type(*)</label>
                             <div className="col-sm-10 col-xs-8 dropdown">
-
-                                <button className="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style={{ width: '100%' }}>
-                                    <span style={{ float: 'left' }}>--Select leave type--</span>
-                                    <i className="fa fa-caret-down" style={{ float: 'right' }}></i>
-                                </button>
-                                <ul className="dropdown-menu">
-                                    <li><a href="#">Mourning leave</a></li>
-                                    <li><a href="#">Wedding leave</a></li>
-                                </ul>
+                                <select className="form-control btn btn-primary dropdown-toggle" id="sel1" onChange={this.getLeaveType}>
+                                    <option selected disabled>-- Select leave type --</option>
+                                    <option>Annual</option>
+                                    <option>Compensation</option>
+                                </select>
                             </div>
                         </div>
                         <div className="form-group">
-                            <label className="control-label col-sm-2 col-xs-4">From date(*)</label>
-                            <div className="col-sm-10 col-xs-8 dropdown">
+                            <div className="col-sm-2 col-xs-4" ></div>
+                            <div className="col-sm-10 col-xs-8">{this.state.erroSubmit.leaveType}</div>
+                        </div>
 
-                                <button className="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style={{ width: '100%' }}>
-                                    <span style={{ float: 'left' }}>{this.state.startDate}</span>
-                                    <i className="fa fa-calendar" aria-hidden="true" style={{ float: 'right' }}></i>
-                                </button>
-                                <ul className="dropdown-menu">
-                                    <Calendar
-                                        onChange={this.onChangeDate}
-                                        value={this.state.date}
-                                    />
-                                </ul>
-                            </div>
+                        <DateComponent type="startDate" endDate={this.state.endDate} notifyDate={this.getDate} />
+                        <div className="form-group">
+                            <div className="col-sm-2 col-xs-4" ></div>
+                            <div className="col-sm-10 col-xs-8"> {this.state.erroSubmit.startDay}</div>
+                        </div>
 
+                        <DateComponent type="endDate" startDate={this.state.startDate} notifyDate={this.getDate} />
+                        <div className="form-group">
+                            <div className="col-sm-2 col-xs-4" ></div>
+                            <div className="col-sm-10 col-xs-8">{this.state.erroSubmit.endDay}</div>
                         </div>
 
                     </form>
+                    <p>
+                        {this.state.daysLeave === 0 ? 'No selected days' : `Number of days: ${this.state.daysLeave} days`}
+                    </p>
+                    <div style={{ textAlign: 'right' }}>
+                        <button type="button" className="btn btn-success" onClick={this.submitLeaveRequest}>Submit</button>
+                    </div>
                 </div>
             </div >
         );

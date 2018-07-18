@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { connect } from 'react-redux';
 import { simpleAction } from './actions/actions'
-import Greeting from './component/Header'
-import Greeting2 from './component/Header2'
 import MainComponent from './component/main/MainComponent';
+import LoginComponent from './component/login/LoginComponenent';
 
 class App extends Component {
   simpleAction = (event) => {
@@ -52,6 +50,7 @@ class App extends Component {
           this.state.text === "Hi" ? <Greeting2 propFromParent={this.state.text} /> : <Greeting propFromParent={this.state.text} />
         } */}
         <MainComponent/>
+        <LoginComponent/>
 
       </div>
     );
