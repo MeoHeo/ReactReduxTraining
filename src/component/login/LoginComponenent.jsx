@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal';
 import './login.css'
+import { Link } from 'react-router-dom'
+
 
 const customStyles = {
     content: {
@@ -18,7 +20,7 @@ export default class LoginComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            modalIsOpen: false
+            modalIsOpen: true
         }
     }
 
@@ -38,11 +40,10 @@ export default class LoginComponent extends Component {
     render() {
         return (
             <div className="LoginComponent">
-                <button onClick={this.openModal}>Open Modal</button>
                 <Modal
                     isOpen={this.state.modalIsOpen}
-                    onAfterOpen={this.afterOpenModal}
-                    onRequestClose={this.closeModal}
+                    // onAfterOpen={this.afterOpenModal}
+                    // onRequestClose={this.closeModal}
                     contentLabel="Example Modal"
                     style={customStyles}
                 >
@@ -72,10 +73,10 @@ export default class LoginComponent extends Component {
                                     <label className="form-check-label" htmlFor="exampleCheck1">Remember me on this computer</label>
                                 </div>
                                 <div style={{marginLeft:'15%'}}>
-                                    <button type="submit" className="btn btn-primary">SIGN IN
+                                    <button type="submit" className="btn btn-primary"><Link to="/home" style={{color:'white'}}>SIGN IN</Link>
                                     <i className="fa fa-sign-in" style={{marginLeft:'5px'}}></i>
                                     </button>
-                                    <div className="LoginComponent-body-resetPass">Forgot Your Password ?</div>
+                                    <div className="LoginComponent-body-resetPass"><a href="https://intranet.terralogic.com/" target="blank">Forgot Your Password ?</a></div>
                                 </div>
                             </form>
                         </div>

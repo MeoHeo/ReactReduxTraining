@@ -101,8 +101,17 @@ export default class MainComponent extends Component {
 
     render() {
         return (
-            <div className='MainComponent row'>
-                <div className="MainComponent-top col-md-12">
+            <div className='MainComponent'>
+                <div className='MainComponent-header col-md-12'>
+                    <div className='MainComponent-header-logo col-md-6 col-sm-6 col-xs-6'>
+                        <img src="https://image4.owler.com/logo/terralogic_owler_20170814_141309_original.jpg" style={{width:'140px'}}/>
+                    </div>
+                    <div className='MainComponent-header-avatar col-md-6 col-sm-6 col-xs-6'>
+                        <img src = 'https://png.icons8.com/color/1600/avatar.png'/>
+                    </div>
+                </div>
+                <div className="container">
+                <div className="MainComponent-top MainComponent-frame col-md-12">
                     <p>Annual Balance</p>
                     <table className="table">
                         <thead>
@@ -127,7 +136,7 @@ export default class MainComponent extends Component {
                         </tbody>
                     </table>
                 </div>
-                <div className="MainComponent-bottom col-md-12">
+                <div className="MainComponent-bottom MainComponent-frame col-md-12">
                     <p>Leave Request</p>
                     <form className="form-horizontal">
                         <div className="form-group">
@@ -158,12 +167,13 @@ export default class MainComponent extends Component {
                         </div>
 
                     </form>
-                    <p>
+                    <div className="form-group">
                         {this.state.daysLeave === 0 ? 'No selected days' : `Number of days: ${this.state.daysLeave} days`}
-                    </p>
+                    </div>
                     <div style={{ textAlign: 'right' }}>
                         <button type="button" className="btn btn-success" onClick={this.submitLeaveRequest}>Submit</button>
                     </div>
+                </div>
                 </div>
             </div >
         );

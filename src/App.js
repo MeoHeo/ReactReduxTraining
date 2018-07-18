@@ -1,33 +1,35 @@
-import React, { Component } from 'react';
-import './App.css';
-import { connect } from 'react-redux';
-import { simpleAction } from './actions/actions'
-import MainComponent from './component/main/MainComponent';
-import LoginComponent from './component/login/LoginComponenent';
+import React, { Component } from "react";
+import "./App.css";
+import { connect } from "react-redux";
+import { simpleAction } from "./actions/actions";
+import MainComponent from "./component/main/MainComponent";
+import LoginComponent from "./component/login/LoginComponenent";
+import {Switch, withRouter} from 'react-router';
+import {Route} from 'react-router-dom';
 
 class App extends Component {
-  simpleAction = (event) => {
+  simpleAction = event => {
     this.props.simpleAction();
-  }
+  };
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       text: "Hello"
-    }
+    };
   }
   changeText = () => {
-    if(this.state.text==="Hi"){
+    if (this.state.text === "Hi") {
       this.setState({ text: "Hello" });
-    }else{
+    } else {
       this.setState({ text: "Hi" });
-    }   
-  }
-  changeState = ()=>{
-    this.setState({text:"Halu Halu"})
-  }
+    }
+  };
+  changeState = () => {
+    this.setState({ text: "Halu Halu" });
+  };
   render() {
     return (
-      <div className="container">
+      <div className="">
         {/* <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
@@ -49,18 +51,24 @@ class App extends Component {
         {
           this.state.text === "Hi" ? <Greeting2 propFromParent={this.state.text} /> : <Greeting propFromParent={this.state.text} />
         } */}
-        <MainComponent/>
-        <LoginComponent/>
-
+        {/* <MainComponent/>
+        <LoginComponent/> */}
+        <Switch>
+          <Route exact path={"/"} component={LoginComponent} />
+          <Route path={"/home"} component={MainComponent} />
+        </Switch>
       </div>
     );
   }
 }
 const mapStateToProps = state => ({
   ...state
-})
+});
 const mapDispatchToProps = dispatch => ({
   simpleAction: () => dispatch(simpleAction())
-})
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(App));
