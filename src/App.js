@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import "./App.css";
 import { connect } from "react-redux";
 import { simpleAction } from "./actions/actions";
-import MainComponent from "./component/main/MainComponent";
 import LoginComponent from "./component/login/LoginComponenent";
 import {Switch, withRouter} from 'react-router';
 import {Route} from 'react-router-dom';
+import HomeComponent from "./component/main/HomeComponent";
 
 class App extends Component {
   simpleAction = event => {
@@ -55,7 +55,7 @@ class App extends Component {
         <LoginComponent/> */}
         <Switch>
           <Route exact path={"/"} component={LoginComponent} />
-          <Route path={"/home"} component={MainComponent} />
+          <Route path={"/home"} component={HomeComponent} />
         </Switch>
       </div>
     );

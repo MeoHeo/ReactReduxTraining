@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal';
+import { changeLoginStatus, changeUserInfo } from "../../actions/actions";
+import { connect } from "react-redux";
 import './login.css'
 
 
@@ -15,15 +17,15 @@ const customStyles = {
 };
 Modal.setAppElement(document.getElementById('root'));
 
-export default class LoginComponent extends Component {
+class LoginComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
             modalIsOpen: true,
-            email:'',
-            pass:'',
-            erroEmail:'',
-            erroPass:''
+            email: '',
+            pass: '',
+            erroEmail: '',
+            erroPass: ''
         }
     }
 
@@ -39,50 +41,52 @@ export default class LoginComponent extends Component {
     closeModal = () => {
         this.setState({ modalIsOpen: false });
     }
-    signIn=(e)=>{
+    signIn = (e) => {
         e.preventDefault();
-        if(this.state.email!==''&&this.state.pass!==''){
-            this.props.history.push('/home')
-        }else{
-            this.erroEmail();
-            this.erroPass();
+        if (this.props.user.email !== '' && this.props.user.pass !== '') {
+            this.props.history.push('/home');
+            this.props.changeLoginStatus(true);
+            this.setLocalStorage('isLogin', true);
+        } else {
+            this.erroEmail(this.props.user.email);
+            this.erroPass(this.props.user.pass);
         }
     }
-    erroEmail=()=>{
-        if(this.state.email===''){
-            this.setState({
-                erroEmail:'This field is requied'
-            })
-        }else{
-            this.setState({
-                erroEmail:''
-            })
-        }
+    setLocalStorage = (key, value) => {
+        localStorage.setItem(key, value);
     }
-    erroPass=()=>{
-        if(this.state.pass===''){
+    erroEmail = (value) => {
+        if (value === '') {
             this.setState({
-                erroPass:'This field is requied'
+                erroEmail: 'This field is requied'
             })
-        }else{
+        } else {
             this.setState({
-                erroPass:''
+                erroEmail: ''
             })
         }
     }
-    changeEmail=(e)=>{
-        this.setState({
-            email:e.target.value
-        },function(){
-            this.erroEmail();
-        })
+    erroPass = (value) => {
+        if (value === '') {
+            this.setState({
+                erroPass: 'This field is requied'
+            })
+        } else {
+            this.setState({
+                erroPass: ''
+            })
+        }
     }
-    changePass=(e)=>{
-        this.setState({
-            pass:e.target.value
-        },function(){
-            this.erroPass();
-        })
+    changeEmail = (e) => {
+        let user = { ...this.props.user, email: e.target.value }
+        this.props.changeUserInfo(user)
+        this.erroEmail(e.target.value);
+    }
+    changePass = (e) => {
+        let user = { ...this.props.user, pass: e.target.value }
+        this.props.changeUserInfo(user)
+        this.erroPass(e.target.value);
+
     }
 
     render() {
@@ -106,7 +110,7 @@ export default class LoginComponent extends Component {
                         <div className="LoginComponent-body">
                             <form className="form-horizontal" onSubmit={this.signIn}>
                                 <div className="form-group">
-                                    <img src="https://image4.owler.com/logo/terralogic_owler_20170814_141309_original.jpg" />
+                                    <img src="https://image4.owler.com/logo/terralogic_owler_20170814_141309_original.jpg" alt="logo" />
                                 </div>
                                 <div className="form-group">
                                     <i className="fa fa-user"></i>
@@ -122,12 +126,12 @@ export default class LoginComponent extends Component {
                                     <input type="checkbox" className="form-check-input" id="exampleCheck1" />
                                     <label className="form-check-label" htmlFor="exampleCheck1">Remember me on this computer</label>
                                 </div>
-                                <div style={{marginLeft:'15%'}}>
+                                <div style={{ marginLeft: '15%' }}>
                                     <button className="btn btn-primary" onClick={this.signIn}>
                                         {/* <Link to="/home" style={{color:'white'}}>SIGN IN */}
-                                    {/* </Link> */}
-                                    SING IN
-                                    <i className="fa fa-sign-in" style={{marginLeft:'5px'}}></i>
+                                        {/* </Link> */}
+                                        SING IN
+                                    <i className="fa fa-sign-in" style={{ marginLeft: '5px' }}></i>
                                     </button>
                                     <div className="LoginComponent-body-resetPass"><a href="https://intranet.terralogic.com/" target="blank">Forgot Your Password ?</a></div>
                                 </div>
@@ -141,3 +145,16 @@ export default class LoginComponent extends Component {
         );
     }
 }
+const mapStateToProps = state => {
+    return {
+        isLogin: state.reducers.isLogin,
+        user: state.reducers.user
+    }
+}
+export default connect(
+    mapStateToProps,
+    {
+        changeLoginStatus: changeLoginStatus,
+        changeUserInfo: changeUserInfo
+    }
+)((LoginComponent));

@@ -25,19 +25,21 @@
     }
     &-top{
         table{
-            tr{
-                font-size: 12px;
-            }
-            @media only screen and (max-width: 445px) {
+            thead{
                 tr{
-                    font-size: 9px;
+                    font-size: 12px;
                 }
-            }
-            @media only screen and (max-width: 535px) {
-                tr{
-                    font-size: 7px;
+                @media only screen and (max-width: 445px) {
+                    tr{
+                        font-size: 9px;
+                    }
                 }
-            }
+                @media only screen and (max-width: 535px) {
+                    tr{
+                        font-size: 7px;
+                    }
+                }
+            }      
         }
         
     }

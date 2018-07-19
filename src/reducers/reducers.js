@@ -1,14 +1,47 @@
-const initialState = { 
-    todos: [{id:123, text:'hello', completed: false}] 
-  };
-  
-export default (state = initialState, action) => {
+import * as ActionTypes from '../constant'
+const initialState = {
+    leaveType: {
+        annual: {
+            type: 'Annual',
+            total: 12,
+            remaining: 12,
+            leave: 0,
+        },
+        compensation: {
+            type: 'Compensation',
+            total: 12,
+            remaining: 12,
+            leave: 0,
+        }
+    },
+    isLogin: false,
+    user: {
+        email: '',
+        pass: ''
+    }
+};
+
+export default function reducer(state = initialState, action) {
     switch (action.type) {
-        case 'SIMPLE_ACTION':
-            return {
-                ...state,
-                result: action.payload
+        case ActionTypes.UPDATE_BALANCE:
+            {
+                return Object.assign({}, state, {
+                    leaveType: action.newBalance
+                });
             }
+        case ActionTypes.UPDATE_LOGIN_STATUS:
+            {
+                return Object.assign({}, state, {
+                    isLogin: action.status
+                });
+            }
+        case ActionTypes.UPDATE_USER:
+            {
+                return Object.assign({}, state, {
+                    user: action.user
+                });
+            }
+
         default:
             return state
     }

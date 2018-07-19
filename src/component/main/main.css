@@ -28,18 +28,18 @@
   min-width: unset !important;
 }
 
-.MainComponent-top table tr {
+.MainComponent-top table thead tr {
   font-size: 12px;
 }
 
 @media only screen and (max-width: 445px) {
-  .MainComponent-top table tr {
+  .MainComponent-top table thead tr {
     font-size: 9px;
   }
 }
 
 @media only screen and (max-width: 535px) {
-  .MainComponent-top table tr {
+  .MainComponent-top table thead tr {
     font-size: 7px;
   }
 }

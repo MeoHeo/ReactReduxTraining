@@ -15,8 +15,12 @@
         color: #fff;
         min-height: 16.4286px;
         padding: 15px;
+        border-top-right-radius: 10px;
+        border-top-left-radius: 10px;
     }
     &-body{
+        border-bottom-right-radius: 10px;
+        border-bottom-left-radius: 10px;
         padding-bottom: 30px;
         background-color: white;
         h4{

@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import './main.css';
 import DateComponent from '../date/DateComponent';
 import moment from 'moment';
-import { Link } from 'react-router-dom'
 import _ from 'lodash';
+import { connect } from "react-redux";
+import { changeLeaveType,changeLoginStatus } from "../../actions/actions";
 
-export default class MainComponent extends Component {
+class HomeComponent extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -17,22 +18,20 @@ export default class MainComponent extends Component {
                 leaveType: '',
                 startDay: '',
                 endDay: ''
-            },
-            leaveType: {
-                annual: {
-                    type: 'Annual',
-                    total: 12,
-                    remaining: 12,
-                    leave: 0,
-                },
-                compensation: {
-                    type: 'Compensation',
-                    total: 12,
-                    remaining: 12,
-                    leave: 0,
-                }
             }
         }
+    }
+    componentWillMount(){
+        if(localStorage.getItem('isLogin')){
+
+        }else{
+            if(!this.props.reducers.isLogin){
+                this.props.history.push('/')
+            }
+        }  
+    }
+    setLocalStorage = (key, value) => {
+        localStorage.setItem(key,value );
     }
     getDate = (type, date) => {
         if (type === "startDate") {
@@ -85,30 +84,27 @@ export default class MainComponent extends Component {
     }
     updateBalance = () => {
         let leaveDays = this.state.daysLeave;
-        let oldState = _.cloneDeep(this.state.leaveType);
+        let oldState = _.cloneDeep(this.props.reducers.leaveType);
         if (this.state.leaveTypeChoose === "Annual") {
-            this.setState({
-                leaveType: {
-                    ...this.state.leaveType,
-                    annual: {
-                        ...this.state.leaveType.annual,
-                        remaining: (oldState.annual.total - oldState.annual.leave - leaveDays) > 0 ? oldState.annual.total - oldState.annual.leave - leaveDays : 0,
-                        leave: oldState.annual.leave + leaveDays,
-                    }
+            oldState = {
+                ...oldState,
+                annual:{
+                    ...oldState.annual,
+                    remaining: (oldState.annual.total - oldState.annual.leave - leaveDays) > 0 ? oldState.annual.total - oldState.annual.leave - leaveDays : 0,
+                    leave: oldState.annual.leave + leaveDays,
                 }
-            })
+            }
         } else {
-            this.setState({
-                leaveType: {
-                    ...this.state.leaveType,
-                    compensation: {
-                        ...this.state.leaveType.compensation,
-                        remaining: (oldState.compensation.total - oldState.compensation.leave - leaveDays) > 0 ? oldState.compensation.total - oldState.compensation.leave - leaveDays : 0,
-                        leave: oldState.compensation.leave + leaveDays,
-                    }
+            oldState = {
+                ...oldState,
+                compensation:{
+                    ...oldState.compensation,
+                    remaining: (oldState.compensation.total - oldState.compensation.leave - leaveDays) > 0 ? oldState.compensation.total - oldState.compensation.leave - leaveDays : 0,
+                    leave: oldState.compensation.leave + leaveDays,
                 }
-            })
+            }        
         }
+        this.props.changeLeaveType(oldState)
     }
     resetForm = () => {
         this.setState({
@@ -123,51 +119,51 @@ export default class MainComponent extends Component {
             },
         })
     }
-    checkLeaveType=()=>{
+    checkLeaveType = () => {
         if (this.state.leaveTypeChoose === '') {
             this.setState({
-                erroSubmit:{
+                erroSubmit: {
                     ...this.state.erroSubmit,
                     leaveType: "Leave type id can't be empty"
                 }
             })
         } else {
             this.setState({
-                erroSubmit:{
+                erroSubmit: {
                     ...this.state.erroSubmit,
                     leaveType: ''
                 }
             })
         }
     }
-    checkStartDate=()=>{
+    checkStartDate = () => {
         if (!this.state.startDate) {
             this.setState({
-                erroSubmit:{
+                erroSubmit: {
                     ...this.state.erroSubmit,
                     startDay: "Start day can't be empty"
                 }
             })
         } else {
             this.setState({
-                erroSubmit:{
+                erroSubmit: {
                     ...this.state.erroSubmit,
                     startDay: ''
                 }
             })
         }
     }
-    checkEndDate=()=>{
+    checkEndDate = () => {
         if (!this.state.endDate) {
             this.setState({
-                erroSubmit:{
+                erroSubmit: {
                     ...this.state.erroSubmit,
                     endDay: "End day can't be empty"
                 }
             })
         } else {
             this.setState({
-                erroSubmit:{
+                erroSubmit: {
                     ...this.state.erroSubmit,
                     endDay: ''
                 }
@@ -207,9 +203,14 @@ export default class MainComponent extends Component {
     getLeaveType = (e) => {
         this.setState({
             leaveTypeChoose: e.target.value
-        },function(){
+        }, function () {
             this.checkLeaveType();
         })
+    }
+    signOut=()=>{
+        this.props.history.push('/');
+        this.props.changeLoginStatus(false);
+        localStorage.removeItem('isLogin');
     }
 
     render() {
@@ -225,7 +226,7 @@ export default class MainComponent extends Component {
                                 <img src='https://png.icons8.com/color/1600/avatar.png' />
                             </div>
                             <ul className="dropdown-menu">
-                                <li><Link to="/" style={{ color: '#337ab7', fontWeight: '700' }}>SIGN OUT</Link></li>
+                                <li onClick={this.signOut}><a style={{ color: '#337ab7', fontWeight: '700' }}>SIGN OUT</a></li>
                             </ul>
                         </div>
 
@@ -247,12 +248,12 @@ export default class MainComponent extends Component {
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>{this.state.leaveType.annual.total}</td>
-                                    <td>{this.state.leaveType.annual.remaining}</td>
-                                    <td>{this.state.leaveType.annual.leave}</td>
-                                    <td>{this.state.leaveType.compensation.total}</td>
-                                    <td>{this.state.leaveType.compensation.remaining}</td>
-                                    <td>{this.state.leaveType.compensation.leave}</td>
+                                    <td>{this.props.reducers.leaveType.annual.total}</td>
+                                    <td>{this.props.reducers.leaveType.annual.remaining}</td>
+                                    <td>{this.props.reducers.leaveType.annual.leave}</td>
+                                    <td>{this.props.reducers.leaveType.compensation.total}</td>
+                                    <td>{this.props.reducers.leaveType.compensation.remaining}</td>
+                                    <td>{this.props.reducers.leaveType.compensation.leave}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -265,8 +266,8 @@ export default class MainComponent extends Component {
                                 <div className="col-sm-10 col-xs-8 dropdown">
                                     <select value={this.state.leaveTypeChoose === '' ? '-- Select leave type --' : this.state.leaveTypeChoose} className="form-control btn btn-primary dropdown-toggle" id="sel1" onChange={this.getLeaveType}>
                                         <option disabled>-- Select leave type --</option>
-                                        <option>{this.state.leaveType.annual.type}</option>
-                                        <option>{this.state.leaveType.compensation.type}</option>
+                                        <option>{this.props.reducers.leaveType.annual.type}</option>
+                                        <option>{this.props.reducers.leaveType.compensation.type}</option>
                                     </select>
                                 </div>
                             </div>
@@ -305,3 +306,15 @@ export default class MainComponent extends Component {
         );
     }
 }
+const mapStateToProps = state => {
+    return {
+        ...state
+    }
+}
+export default connect(
+    mapStateToProps,
+    {
+        changeLeaveType: changeLeaveType,
+        changeLoginStatus: changeLoginStatus
+    }
+)((HomeComponent));
