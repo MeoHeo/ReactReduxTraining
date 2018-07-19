@@ -56,10 +56,18 @@
 .LoginComponent-body .form-group {
   margin-right: 0 !important;
   margin-left: 0 !important;
+  margin-bottom: 10px !important;
 }
 
 .LoginComponent-body .form-group i {
   font-size: 20px;
   margin-left: 5%;
   margin-top: 10px;
+}
+
+.erro {
+  margin-left: 15%;
+  color: #ff6200;
+  font-size: 10px;
+  padding-bottom: 5px;
 }

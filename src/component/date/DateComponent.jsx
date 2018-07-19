@@ -7,14 +7,8 @@ import './date.css'
 export default class DateComponent extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            date: null,
-        }
     }
     handleChange = (date) => {
-        this.setState({
-            date: date
-        });
         this.props.notifyDate(this.props.type,date);
     }
     render() {
@@ -27,10 +21,10 @@ export default class DateComponent extends Component {
                 <div className="col-sm-10 col-xs-8">
                     <i className="fa fa-calendar calendar" aria-hidden="true"></i>
                     <DatePicker
-                        selected={this.state.date}
+                        selected={this.props.type === "startDate"?this.props.startDate:this.props.endDate}
                         onChange={this.handleChange}
-                        minDate={this.props.startDate?this.props.startDate:null}
-                        maxDate={this.props.endDate?this.props.endDate:null}
+                        minDate={this.props.type !== "startDate"?this.props.startDate:null}
+                        maxDate={this.props.type === "startDate"?this.props.endDate:null}
                         placeholderText="mm/dd/yyyy"
                         locale="en-gb"
                     />

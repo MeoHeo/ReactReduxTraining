@@ -16,9 +16,29 @@
                 border-radius: 50%;
                 border: 2px solid #337ab7;
             }
+            ul{
+                right: 0!important;
+                left: unset!important;
+                min-width: unset!important;
+            }
         }
     }
     &-top{
+        table{
+            tr{
+                font-size: 12px;
+            }
+            @media only screen and (max-width: 445px) {
+                tr{
+                    font-size: 9px;
+                }
+            }
+            @media only screen and (max-width: 535px) {
+                tr{
+                    font-size: 7px;
+                }
+            }
+        }
         
     }
     &-bottom{
@@ -34,6 +54,16 @@
             color: #337ab7;
             font-weight: 700;
         }
+    }
+    .mumberLeave{
+        padding-top: 5px;
+        color: #ff8600;
+        font-size: 16px;
+        font-weight: 700;
+    }
+    .erro{
+        color: #ff5600;
+        font-size: 10px;
     }
 }
 .ellipsis {
