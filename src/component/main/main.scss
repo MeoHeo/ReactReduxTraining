@@ -74,4 +74,19 @@
     width: 100px;
     display: block;
     overflow: hidden
-  }
+}
+.wrapUserInfo{
+    display: inline-grid;
+    transform: translateY(-10%);
+    &-aloha{
+        width: 80px;
+        text-align: center;
+        font-weight: 700;
+    }
+    &-userInfo{
+        max-width: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        text-align: center;
+    }
+}

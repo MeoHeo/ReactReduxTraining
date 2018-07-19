@@ -4,7 +4,7 @@ import DateComponent from '../date/DateComponent';
 import moment from 'moment';
 import _ from 'lodash';
 import { connect } from "react-redux";
-import { changeLeaveType,changeLoginStatus } from "../../actions/actions";
+import { changeLeaveType,changeLoginStatus, changeUserInfo } from "../../actions/actions";
 
 class HomeComponent extends Component {
     constructor(props) {
@@ -23,7 +23,11 @@ class HomeComponent extends Component {
     }
     componentWillMount(){
         if(localStorage.getItem('isLogin')){
-
+            if(localStorage.getItem('email')){
+                let user = { email: localStorage.getItem('email'), pass:localStorage.getItem('pass')};
+                this.props.changeUserInfo(user)
+            }
+            
         }else{
             if(!this.props.reducers.isLogin){
                 this.props.history.push('/')
@@ -210,7 +214,9 @@ class HomeComponent extends Component {
     signOut=()=>{
         this.props.history.push('/');
         this.props.changeLoginStatus(false);
-        localStorage.removeItem('isLogin');
+        let user = {email: '', pass:''}
+        this.props.changeUserInfo(user);
+        localStorage.clear();
     }
 
     render() {
@@ -221,9 +227,13 @@ class HomeComponent extends Component {
                         <img src="https://image4.owler.com/logo/terralogic_owler_20170814_141309_original.jpg" style={{ width: '140px' }} />
                     </div>
                     <div className='MainComponent-header-avatar col-md-6 col-sm-6 col-xs-6'>
-                        <div style={{ width: 'fit-content', paddingLeft: 'calc(100% - 40px)' }}>
-                            <div data-toggle="dropdown">
+                        <div>
+                            <div data-toggle="dropdown">                               
                                 <img src='https://png.icons8.com/color/1600/avatar.png' />
+                                <div className="wrapUserInfo">
+                                <span className="wrapUserInfo-aloha">Welcome</span>
+                                <span className="wrapUserInfo-userInfo">{this.props.reducers.user.email}</span>
+                                </div>
                             </div>
                             <ul className="dropdown-menu">
                                 <li onClick={this.signOut}><a style={{ color: '#337ab7', fontWeight: '700' }}>SIGN OUT</a></li>
@@ -315,6 +325,7 @@ export default connect(
     mapStateToProps,
     {
         changeLeaveType: changeLeaveType,
-        changeLoginStatus: changeLoginStatus
+        changeLoginStatus: changeLoginStatus,
+        changeUserInfo: changeUserInfo
     }
 )((HomeComponent));

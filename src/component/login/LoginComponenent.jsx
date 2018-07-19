@@ -22,11 +22,17 @@ class LoginComponent extends Component {
         super(props)
         this.state = {
             modalIsOpen: true,
-            email: '',
-            pass: '',
+            remember: false,
             erroEmail: '',
             erroPass: ''
         }
+    }
+    componentWillMount(){
+        if(localStorage.getItem('email')){
+            let user = { email: localStorage.getItem('email'), pass:localStorage.getItem('pass')};
+            this.props.changeUserInfo(user)
+            this.setState({remember:true})
+        } 
     }
 
     openModal = () => {
@@ -47,6 +53,10 @@ class LoginComponent extends Component {
             this.props.history.push('/home');
             this.props.changeLoginStatus(true);
             this.setLocalStorage('isLogin', true);
+            // if(this.state.remember){
+                this.setLocalStorage('email', this.props.user.email);
+                this.setLocalStorage('pass', this.props.user.pass);
+            // }
         } else {
             this.erroEmail(this.props.user.email);
             this.erroPass(this.props.user.pass);
@@ -88,6 +98,11 @@ class LoginComponent extends Component {
         this.erroPass(e.target.value);
 
     }
+    rememberUser=()=>{
+        this.setState({
+            remember:true
+        })
+    }
 
     render() {
         return (
@@ -114,23 +129,23 @@ class LoginComponent extends Component {
                                 </div>
                                 <div className="form-group">
                                     <i className="fa fa-user"></i>
-                                    <input type="email" className="form-control" id="email" onChange={this.changeEmail} />
+                                    <input type="email" className="form-control" id="email" onChange={this.changeEmail} value={this.props.user.email} />
                                 </div>
                                 <div className="erro">{this.state.erroEmail}</div>
                                 <div className="form-group">
                                     <i className="fa fa-lock"></i>
-                                    <input type="password" className="form-control" id="pwd" onChange={this.changePass} />
+                                    <input type="password" className="form-control" id="pwd" onChange={this.changePass} value={this.props.user.pass} />
                                 </div>
                                 <div className="erro">{this.state.erroPass}</div>
                                 <div className="form-check">
-                                    <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-                                    <label className="form-check-label" htmlFor="exampleCheck1">Remember me on this computer</label>
+                                    <input type="checkbox" className="form-check-input" checked = {this.state.remember}id="remember" onChange={this.rememberUser}/>
+                                    <label className="form-check-label" htmlFor="remember">Remember me on this computer</label>
                                 </div>
                                 <div style={{ marginLeft: '15%' }}>
                                     <button className="btn btn-primary" onClick={this.signIn}>
                                         {/* <Link to="/home" style={{color:'white'}}>SIGN IN */}
                                         {/* </Link> */}
-                                        SING IN
+                                        SIGN IN
                                     <i className="fa fa-sign-in" style={{ marginLeft: '5px' }}></i>
                                     </button>
                                     <div className="LoginComponent-body-resetPass"><a href="https://intranet.terralogic.com/" target="blank">Forgot Your Password ?</a></div>

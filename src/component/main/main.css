@@ -80,3 +80,21 @@
   display: block;
   overflow: hidden;
 }
+
+.wrapUserInfo {
+  display: inline-grid;
+  transform: translateY(-10%);
+}
+
+.wrapUserInfo-aloha {
+  width: 80px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.wrapUserInfo-userInfo {
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}

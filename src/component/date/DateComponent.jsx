@@ -7,6 +7,8 @@ import './date.css'
 export default class DateComponent extends Component {
     constructor(props) {
         super(props)
+        this.state = {
+        }
     }
     handleChange = (date) => {
         this.props.notifyDate(this.props.type,date);
