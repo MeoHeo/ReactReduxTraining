@@ -27,6 +27,11 @@ class HomeComponent extends Component {
                 let user = { email: localStorage.getItem('email'), pass:localStorage.getItem('pass')};
                 this.props.changeUserInfo(user)
             }
+            if(localStorage.getItem('balance')){
+                let balance = localStorage.getItem('balance');
+                console.log("test", JSON.parse(balance));
+                this.props.changeLeaveType(JSON.parse(balance));
+            }
             
         }else{
             if(!this.props.reducers.isLogin){
@@ -108,7 +113,8 @@ class HomeComponent extends Component {
                 }
             }        
         }
-        this.props.changeLeaveType(oldState)
+        this.props.changeLeaveType(oldState);
+        localStorage.setItem('balance', JSON.stringify(oldState));
     }
     resetForm = () => {
         this.setState({
@@ -211,12 +217,30 @@ class HomeComponent extends Component {
             this.checkLeaveType();
         })
     }
+    resetData=()=>{
+        this.props.changeLoginStatus(false);
+        let user = {email: '', pass:''};
+        let leaveType = {
+            annual: {
+                type: 'Annual',
+                total: 12,
+                remaining: 12,
+                leave: 0,
+            },
+            compensation: {
+                type: 'Compensation',
+                total: 12,
+                remaining: 12,
+                leave: 0,
+            }
+        }
+        this.props.changeUserInfo(user);
+        this.props.changeLeaveType(leaveType);
+        localStorage.clear();
+    }
     signOut=()=>{
         this.props.history.push('/');
-        this.props.changeLoginStatus(false);
-        let user = {email: '', pass:''}
-        this.props.changeUserInfo(user);
-        localStorage.clear();
+        this.resetData();
     }
 
     render() {
