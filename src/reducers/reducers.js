@@ -41,6 +41,12 @@ export default function reducer(state = initialState, action) {
                     user: action.user
                 });
             }
+        case ActionTypes.CHECK_USER_INFO:
+            {
+                return Object.assign({}, state, {
+                    isUser: action.isUser
+                });
+            }
 
         default:
             return state

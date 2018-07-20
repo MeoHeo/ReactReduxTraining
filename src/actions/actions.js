@@ -1,4 +1,5 @@
 import * as Types from '.././constant';
+import * as fakeApi from '../fakeApi/api';
 export const simpleAction = () => dispatch => {
     dispatch({
         type: 'SIMPLE_ACTION',
@@ -26,6 +27,16 @@ export function changeUserInfo(user) {
         dispatch({
             type: Types.UPDATE_USER,
             user
+        })
+    }
+}
+
+export function checkUserInfo(user) {
+    return function (dispatch) {
+        let isUser = fakeApi.checkUserInfo(user.email, user.pass);
+        dispatch({
+            type: Types.CHECK_USER_INFO,
+            isUser: isUser
         })
     }
 }

@@ -16,6 +16,7 @@ export default class Greeting2 extends Component {
             <h1>{this.props.propFromParent}, {this.props.name}</h1>
         );
     }
+    
 }
 
 // Specifies the default values for props:

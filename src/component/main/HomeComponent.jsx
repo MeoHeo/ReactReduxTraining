@@ -4,7 +4,7 @@ import DateComponent from '../date/DateComponent';
 import moment from 'moment';
 import _ from 'lodash';
 import { connect } from "react-redux";
-import { changeLeaveType,changeLoginStatus, changeUserInfo } from "../../actions/actions";
+import { changeLeaveType, changeLoginStatus, changeUserInfo } from "../../actions/actions";
 
 class HomeComponent extends Component {
     constructor(props) {
@@ -21,26 +21,26 @@ class HomeComponent extends Component {
             }
         }
     }
-    componentWillMount(){
-        if(localStorage.getItem('isLogin')){
-            if(localStorage.getItem('email')){
-                let user = { email: localStorage.getItem('email'), pass:localStorage.getItem('pass')};
+    componentWillMount() {
+        if (localStorage.getItem('isLogin')) {
+            if (localStorage.getItem('email')) {
+                let user = { email: localStorage.getItem('email'), pass: localStorage.getItem('pass') };
                 this.props.changeUserInfo(user)
             }
-            if(localStorage.getItem('balance')){
+            if (localStorage.getItem('balance')) {
                 let balance = localStorage.getItem('balance');
                 console.log("test", JSON.parse(balance));
                 this.props.changeLeaveType(JSON.parse(balance));
             }
-            
-        }else{
-            if(!this.props.reducers.isLogin){
+
+        } else {
+            if (!this.props.reducers.isLogin) {
                 this.props.history.push('/')
             }
-        }  
+        }
     }
     setLocalStorage = (key, value) => {
-        localStorage.setItem(key,value );
+        localStorage.setItem(key, value);
     }
     getDate = (type, date) => {
         if (type === "startDate") {
@@ -94,10 +94,11 @@ class HomeComponent extends Component {
     updateBalance = () => {
         let leaveDays = this.state.daysLeave;
         let oldState = _.cloneDeep(this.props.reducers.leaveType);
+        // let a =_.get(this.props, 'props.reducers.leaveType', {})
         if (this.state.leaveTypeChoose === "Annual") {
             oldState = {
                 ...oldState,
-                annual:{
+                annual: {
                     ...oldState.annual,
                     remaining: (oldState.annual.total - oldState.annual.leave - leaveDays) > 0 ? oldState.annual.total - oldState.annual.leave - leaveDays : 0,
                     leave: oldState.annual.leave + leaveDays,
@@ -106,12 +107,12 @@ class HomeComponent extends Component {
         } else {
             oldState = {
                 ...oldState,
-                compensation:{
+                compensation: {
                     ...oldState.compensation,
                     remaining: (oldState.compensation.total - oldState.compensation.leave - leaveDays) > 0 ? oldState.compensation.total - oldState.compensation.leave - leaveDays : 0,
                     leave: oldState.compensation.leave + leaveDays,
                 }
-            }        
+            }
         }
         this.props.changeLeaveType(oldState);
         localStorage.setItem('balance', JSON.stringify(oldState));
@@ -184,6 +185,7 @@ class HomeComponent extends Component {
         let isErro = false;
         if (this.state.leaveTypeChoose === '') {
             this.state.erroSubmit.leaveType = "Leave type id can't be empty"
+            this.state.error = true;
         } else {
             this.state.erroSubmit.leaveType = ''
         }
@@ -217,9 +219,9 @@ class HomeComponent extends Component {
             this.checkLeaveType();
         })
     }
-    resetData=()=>{
+    resetData = () => {
         this.props.changeLoginStatus(false);
-        let user = {email: '', pass:''};
+        let user = { email: '', pass: '' };
         let leaveType = {
             annual: {
                 type: 'Annual',
@@ -238,7 +240,7 @@ class HomeComponent extends Component {
         this.props.changeLeaveType(leaveType);
         localStorage.clear();
     }
-    signOut=()=>{
+    signOut = () => {
         this.props.history.push('/');
         this.resetData();
     }
@@ -252,11 +254,11 @@ class HomeComponent extends Component {
                     </div>
                     <div className='MainComponent-header-avatar col-md-6 col-sm-6 col-xs-6'>
                         <div>
-                            <div data-toggle="dropdown">                               
+                            <div data-toggle="dropdown">
                                 <img src='https://png.icons8.com/color/1600/avatar.png' />
                                 <div className="wrapUserInfo">
-                                <span className="wrapUserInfo-aloha">Welcome</span>
-                                <span className="wrapUserInfo-userInfo">{this.props.reducers.user.email}</span>
+                                    <span className="wrapUserInfo-aloha">Welcome</span>
+                                    <span className="wrapUserInfo-userInfo">{this.props.reducers.user.email}</span>
                                 </div>
                             </div>
                             <ul className="dropdown-menu">
@@ -269,28 +271,30 @@ class HomeComponent extends Component {
                 <div className="container">
                     <div className="MainComponent-top MainComponent-frame col-md-12">
                         <p>Annual Balance</p>
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th >Total annual leave</th>
-                                    <th >Remaining annual leave day</th>
-                                    <th >Annual leave taken</th>
-                                    <th >Total compensation leave</th>
-                                    <th >Remaining compensation leave day</th>
-                                    <th >Compensation leave taken</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>{this.props.reducers.leaveType.annual.total}</td>
-                                    <td>{this.props.reducers.leaveType.annual.remaining}</td>
-                                    <td>{this.props.reducers.leaveType.annual.leave}</td>
-                                    <td>{this.props.reducers.leaveType.compensation.total}</td>
-                                    <td>{this.props.reducers.leaveType.compensation.remaining}</td>
-                                    <td>{this.props.reducers.leaveType.compensation.leave}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div style={{ overflowX: 'auto' }}>
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th >Total annual leave</th>
+                                        <th >Remaining annual leave day</th>
+                                        <th >Annual leave taken</th>
+                                        <th >Total compensation leave</th>
+                                        <th >Remaining compensation leave day</th>
+                                        <th >Compensation leave taken</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{this.props.reducers.leaveType.annual.total}</td>
+                                        <td>{this.props.reducers.leaveType.annual.remaining}</td>
+                                        <td>{this.props.reducers.leaveType.annual.leave}</td>
+                                        <td>{this.props.reducers.leaveType.compensation.total}</td>
+                                        <td>{this.props.reducers.leaveType.compensation.remaining}</td>
+                                        <td>{this.props.reducers.leaveType.compensation.leave}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div className="MainComponent-bottom MainComponent-frame col-md-12">
                         <p>Leave Request</p>

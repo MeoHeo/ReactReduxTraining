@@ -1,3 +1,4 @@
 export const UPDATE_BALANCE = 'UPDATE_BALANCE';
 export const UPDATE_LOGIN_STATUS = 'UPDATE_LOGIN_STATUS';
-export const UPDATE_USER = 'UPDATE_USER'
+export const UPDATE_USER = 'UPDATE_USER';
+export const CHECK_USER_INFO = 'CHECK_USER_INFO';

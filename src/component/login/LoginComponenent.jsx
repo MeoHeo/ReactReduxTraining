@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Modal from 'react-modal';
-import { changeLoginStatus, changeUserInfo } from "../../actions/actions";
+import { changeLoginStatus, changeUserInfo, checkUserInfo } from "../../actions/actions";
 import { connect } from "react-redux";
 import './login.css'
 
@@ -27,12 +27,12 @@ class LoginComponent extends Component {
             erroPass: ''
         }
     }
-    componentWillMount(){
-        if(localStorage.getItem('email')){
-            let user = { email: localStorage.getItem('email'), pass:localStorage.getItem('pass')};
+    componentWillMount() {
+        if (localStorage.getItem('email')) {
+            let user = { email: localStorage.getItem('email'), pass: localStorage.getItem('pass') };
             this.props.changeUserInfo(user)
-            this.setState({remember:true})
-        } 
+            this.setState({ remember: true })
+        }
     }
 
     openModal = () => {
@@ -50,17 +50,21 @@ class LoginComponent extends Component {
     signIn = (e) => {
         e.preventDefault();
         if (this.props.user.email !== '' && this.props.user.pass !== '') {
+            if (localStorage.getItem('email')) {
+                if(this.props.user.email !== localStorage.getItem('email')){
+                    localStorage.clear();
+                }
+            }
+            this.setLocalStorage('email', this.props.user.email);
+            this.setLocalStorage('pass', this.props.user.pass);
             this.props.history.push('/home');
             this.props.changeLoginStatus(true);
             this.setLocalStorage('isLogin', true);
-            // if(this.state.remember){
-                this.setLocalStorage('email', this.props.user.email);
-                this.setLocalStorage('pass', this.props.user.pass);
-            // }
         } else {
             this.erroEmail(this.props.user.email);
             this.erroPass(this.props.user.pass);
         }
+        // this.props.checkUserInfo(this.props.user);
     }
     setLocalStorage = (key, value) => {
         localStorage.setItem(key, value);
@@ -98,9 +102,9 @@ class LoginComponent extends Component {
         this.erroPass(e.target.value);
 
     }
-    rememberUser=()=>{
+    rememberUser = () => {
         this.setState({
-            remember:true
+            remember: true
         })
     }
 
@@ -137,10 +141,10 @@ class LoginComponent extends Component {
                                     <input type="password" className="form-control" id="pwd" onChange={this.changePass} value={this.props.user.pass} />
                                 </div>
                                 <div className="erro">{this.state.erroPass}</div>
-                                <div className="form-check">
-                                    <input type="checkbox" className="form-check-input" checked = {this.state.remember}id="remember" onChange={this.rememberUser}/>
+                                {/* <div className="form-check">
+                                    <input type="checkbox" className="form-check-input" checked={this.state.remember} id="remember" onChange={this.rememberUser} />
                                     <label className="form-check-label" htmlFor="remember">Remember me on this computer</label>
-                                </div>
+                                </div> */}
                                 <div style={{ marginLeft: '15%' }}>
                                     <button className="btn btn-primary" onClick={this.signIn}>
                                         {/* <Link to="/home" style={{color:'white'}}>SIGN IN */}
@@ -148,7 +152,7 @@ class LoginComponent extends Component {
                                         SIGN IN
                                     <i className="fa fa-sign-in" style={{ marginLeft: '5px' }}></i>
                                     </button>
-                                    <div className="LoginComponent-body-resetPass"><a href="https://intranet.terralogic.com/" target="blank">Forgot Your Password ?</a></div>
+                                    {/* <div className="LoginComponent-body-resetPass"><a href="https://intranet.terralogic.com/" target="blank">Forgot Your Password ?</a></div> */}
                                 </div>
                             </form>
                         </div>
@@ -170,6 +174,7 @@ export default connect(
     mapStateToProps,
     {
         changeLoginStatus: changeLoginStatus,
-        changeUserInfo: changeUserInfo
+        changeUserInfo: changeUserInfo,
+        checkUserInfo: checkUserInfo
     }
 )((LoginComponent));

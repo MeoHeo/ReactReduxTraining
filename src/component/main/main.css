@@ -4,6 +4,7 @@
 }
 
 .MainComponent-header {
+  cursor: pointer;
   padding-top: 20px;
   padding-bottom: 20px;
   margin-bottom: 20px;
@@ -32,15 +33,13 @@
   font-size: 12px;
 }
 
-@media only screen and (max-width: 445px) {
-  .MainComponent-top table thead tr {
-    font-size: 9px;
-  }
+.MainComponent-top table thead tr th {
+  border-bottom: 2px solid #337ab7 !important;
 }
 
-@media only screen and (max-width: 535px) {
+@media only screen and (max-width: 445px) {
   .MainComponent-top table thead tr {
-    font-size: 7px;
+    font-size: 10px;
   }
 }
 
@@ -97,4 +96,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: center;
+}
+
+@media only screen and (max-width: 330px) {
+  .wrapUserInfo {
+    display: none;
+  }
 }
